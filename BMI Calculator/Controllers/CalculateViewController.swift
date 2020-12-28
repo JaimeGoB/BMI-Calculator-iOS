@@ -4,6 +4,8 @@ import UIKit
 class CalculateViewController: UIViewController {
 
  
+    var bmiValue:String = "0.0"
+    
     /*these are for the TEXT that diplays height & weight*/
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var weightLabel: UILabel!
@@ -37,16 +39,25 @@ class CalculateViewController: UIViewController {
         let weight = weightSlider.value
         
         //BMI = Weight / (Height ^2)
-        let BMI = Float(weight) / pow(Float(height), 2.0)
+        let bmi = Float(weight) / pow(Float(height), 2.0)
+        bmiValue = String(format: "%.1f", bmi)
         
-        
-        let secondVC = SecondViewController()
-        secondVC.bmiValue = String(format: "%.1f", BMI)
-        self.present(secondVC, animated: true, completion: nil)
-        
+        self.performSegue(withIdentifier: "goToResults", sender: self)
         
     }
     
-    
+    //whenever .performSegue is called we need to override this function
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        //check we are on the right segue
+        if(segue.identifier == "goToResults"){
+            /* create new reference to resultsViewController
+                    * Forcing destiination to a resultViewController
+                    * Downcasting from UIViewController to resultViewController
+                    */
+            let destinationVC = segue.destination as! resultViewController
+            destinationVC.bmiValue = bmiValue
+        }
+    }
 }
 
