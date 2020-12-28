@@ -4,7 +4,7 @@ import UIKit
 class CalculateViewController: UIViewController {
 
  
-    var bmiValue:String = "0.0"
+    var calculatorBrain = CalculatorBrain()
     
     /*these are for the TEXT that diplays height & weight*/
     @IBOutlet weak var heightLabel: UILabel!
@@ -12,8 +12,6 @@ class CalculateViewController: UIViewController {
     /*these are to store the VALUE when slider is moved*/
     @IBOutlet weak var heightSlider: UISlider!
     @IBOutlet weak var weightSlider: UISlider!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +27,6 @@ class CalculateViewController: UIViewController {
     @IBAction func weightSliderChange(_ sender: UISlider) {
         
         let weight = String(format:"%.0f", sender.value)
-        
         weightLabel.text = weight + "Kg"
     }
     
@@ -38,15 +35,13 @@ class CalculateViewController: UIViewController {
         let height = heightSlider.value
         let weight = weightSlider.value
         
-        //BMI = Weight / (Height ^2)
-        let bmi = Float(weight) / pow(Float(height), 2.0)
-        bmiValue = String(format: "%.1f", bmi)
+        calculatorBrain.calculateBMI(height, weight)
         
+        //Will immediatly go to prepare function, thus it must be overwrittern
         self.performSegue(withIdentifier: "goToResults", sender: self)
-        
     }
     
-    //whenever .performSegue is called we need to override this function
+    //this function call will change the UI for resultViewController to show appropiate things.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         //check we are on the right segue
@@ -56,7 +51,9 @@ class CalculateViewController: UIViewController {
                     * Downcasting from UIViewController to resultViewController
                     */
             let destinationVC = segue.destination as! resultViewController
-            destinationVC.bmiValue = bmiValue
+            destinationVC.bmiValue = calculatorBrain.getBMI()
+            destinationVC.advice = calculatorBrain.getAdvice()
+            destinationVC.color = calculatorBrain.getColor()
         }
     }
 }

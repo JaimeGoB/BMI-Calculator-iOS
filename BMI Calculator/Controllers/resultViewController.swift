@@ -11,6 +11,8 @@ import UIKit
 class resultViewController: UIViewController {
 
     var bmiValue:String?
+    var advice:String?
+    var color:UIColor?
     
     //Values to update GUI
     @IBOutlet weak var bmiLabel: UILabel!
@@ -20,7 +22,8 @@ class resultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bmiLabel.text = bmiValue
-        // Do any additional setup after loading the view.
+        adviceLabel.text = advice
+        view.backgroundColor = color
     }
     
     @IBAction func recalculatePressed(_ sender: UIButton) {
